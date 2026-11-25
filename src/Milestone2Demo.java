@@ -111,7 +111,8 @@ public class Milestone2Demo {
                 new Email(false, "Urgent team meeting"),
                 new Email(false, "Team meeting"),
                 new Email(false, ""),
-                new Email(false, "Nebula")
+                new Email(false, "Nebula"),
+                new Email(true, "Please verify your password immediately")
         );
 
         for (Email example : checks) {
@@ -123,8 +124,16 @@ public class Milestone2Demo {
             if (actual != example.phishing() || baseline != expectedBaseline) {
                 throw new AssertionError("Unexpected output for: " + example.text());
             }
-            System.out.printf(Locale.ROOT, "%s | %.4f | %.4f | %s | %s%n",
-                    example.text(), scores.legitimate(), scores.phishing(), label(actual), label(baseline));
+            System.out.println("----------------------------------------");
+            System.out.println("Input: " + 
+                (example.text().isEmpty() ? "[Empty email]" : example.text()));
+
+            System.out.printf("Legitimate Log Score: %.4f%n", scores.legitimate());
+            System.out.printf("Phishing Log Score:   %.4f%n", scores.phishing());
+
+            System.out.println("Naive Bayes: " + label(actual));
+            System.out.println("Keyword Detection: " + label(baseline));
+            System.out.println();
         }
 
         String[] pattern = {"team", "meeting", "agenda", "project"};
@@ -137,7 +146,11 @@ public class Milestone2Demo {
             int repetitions = Math.max(1000, 1_000_000 / n);
             double bayes = medianTiming(model::predictsPhishing, words, repetitions);
             double keyword = medianTiming(Milestone2Demo::keywordPhishing, words, repetitions);
-            System.out.printf(Locale.ROOT, "%d,%.3f,%.3f%n", n, bayes, keyword);
+            System.out.println("----------------------------------------");
+            System.out.println("Input Size: " + n + " words");
+            System.out.printf("Naive Bayes:       %.3f microseconds%n", bayes);
+            System.out.printf("Keyword Detection: %.3f microseconds%n", keyword);
+            System.out.println();
         }
     }
 }

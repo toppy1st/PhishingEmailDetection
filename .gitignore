@@ -1,4 +1,14 @@
-# Compiled class file
+# Email datasets
+data/*.csv
+
+# Java compiled files
+*.class
+
+# Python cache
+__pycache__/
+
+# macOS files
+.DS_Store# Compiled class file
 *.class
 
 # Log file
